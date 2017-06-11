@@ -1,0 +1,54 @@
+{
+	"__comment": "Copyright © InsomniaKitten 2017",
+	"textures": {
+		"texture": "interaction:items/remote"
+	},
+	"elements": [
+		{
+			"__comment": "remote",
+			"from": [ 4, 1, 15 ],
+			"to": [ 12, 15, 16 ],
+			"faces": {
+				"down": { "uv": [ 4, 0, 12, 1 ], "texture": "#texture" },
+				"up": { "uv": [ 4, 15, 12, 16 ], "texture": "#texture" },
+				"north": { "uv": [ 0, 1, 8, 15 ], "texture": "#texture" },
+				"south": { "uv": [ 8, 1, 16, 15 ], "texture": "#texture" },
+				"west": { "uv": [ 15, 1, 16, 15 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 1, 1, 15 ], "texture": "#texture" }
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation":  [ -20, -180, -10 ],
+			"translation":  [ -1, 4, 3 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"thirdperson_lefthand": {
+			"rotation":  [ -20, -180, -10 ],
+			"translation":  [ -1, 4, 3 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"firstperson_righthand": {
+			"rotation":  [ -47, 164, -5 ],
+			"translation":  [ 1.8256, 3.1999, 1.1299 ],
+			"scale":  [ 0.68, 0.68, 0.68 ]
+		},
+		"firstperson_lefthand": {
+			"rotation":  [ -47, 164, -5 ],
+			"translation":  [ 1.8256, 3.1999, 1.1299 ],
+			"scale":  [ 0.68, 0.68, 0.68 ]
+		},
+		"gui": {
+			"rotation":  [ 0, -180, 0 ],
+			"translation":  [ 0, 0, 7 ]
+		},
+		"ground": {
+			"translation":  [ 0, 2, 0 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"fixed": {
+			"translation":  [ 0, 0, -7 ]
+		}
+	}
+}

@@ -1,0 +1,21 @@
+[
+{
+  "modid": "interaction",
+  "name": "Remote Interaction",
+  "description": "Long-Range right clicks!",
+  "version": "1.0.0",
+  "mcversion": "1.11.2",
+  "url": "",
+  "updateUrl": "",
+  "authors": [
+    "Shadows_of_Fire"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
