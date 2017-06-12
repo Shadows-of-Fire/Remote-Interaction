@@ -25,9 +25,9 @@ import shadows.interact.core.RemoteInteract;
 import shadows.interact.proxy.CommonProxy;
 import shadows.interact.util.EntityIDMessage;
 
-public class ItemInteract extends Item {
+public class ItemEntityRemote extends Item {
 
-	public ItemInteract(String name) {
+	public ItemEntityRemote(String name) {
 		setRegistryName(name);
 		setUnlocalizedName(RemoteInteract.MODID + "." + name);
 		setCreativeTab(CreativeTabs.MISC);
