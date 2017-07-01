@@ -40,12 +40,14 @@ public class ItemBlockRemote extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!stack.hasTagCompound()) return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		if (!stack.hasTagCompound())
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		BlockPos pos = BlockPos.fromLong(stack.getTagCompound().getLong("pos"));
-			EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-			IBlockState state = world.getBlockState(pos);
-			
-			state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), 0.5F, 0.5F, 0.5F);
+		EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+		IBlockState state = world.getBlockState(pos);
+
+		state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), 0.5F, 0.5F,
+				0.5F);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
@@ -57,10 +59,13 @@ public class ItemBlockRemote extends Item {
 
 	private ItemStack mapStack(BlockPos pos, World world, ItemStack stack, EntityPlayer player) {
 		Block block = world.getBlockState(pos).getBlock();
-			stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock()).getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos), new RayTraceResult(new Vec3d(0.5,0.5,0.5), player.getHorizontalFacing(), pos), world, pos, player)));
+		stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock())
+				.getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos),
+						new RayTraceResult(new Vec3d(0.5, 0.5, 0.5), player.getHorizontalFacing(), pos), world, pos,
+						player)));
 
-			NBTTagLong tag = new NBTTagLong(pos.toLong());
-			stack.setTagInfo("pos", tag);
+		NBTTagLong tag = new NBTTagLong(pos.toLong());
+		stack.setTagInfo("pos", tag);
 		return stack;
 	}
 

@@ -70,7 +70,9 @@ public class EntityIDMessage implements IMessage {
 					EntityPlayerSP player = mc.player;
 					World world = mc.world;
 					Entity entity = world.getEntityByID(message.entityID);
-					if(entity instanceof EntityLivingBase && player instanceof EntityPlayer) player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite), (EntityPlayer) player, (EntityLivingBase) entity, opposite);
+					if (entity instanceof EntityLivingBase && player instanceof EntityPlayer)
+						player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite),
+								(EntityPlayer) player, (EntityLivingBase) entity, opposite);
 					entity.processInitialInteract(player, opposite);
 				}
 			});

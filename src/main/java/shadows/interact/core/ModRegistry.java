@@ -8,7 +8,7 @@ import shadows.interact.common.ItemEntityRemote;
 public class ModRegistry {
 	public static final ItemBlockRemote REMOTE = new ItemBlockRemote("remote");
 	public static final ItemEntityRemote REMOTE_E = new ItemEntityRemote("entity_remote");
-	
+
 	@SideOnly(Side.CLIENT)
 	public static void initModels() {
 		REMOTE.initModel();

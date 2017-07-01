@@ -44,14 +44,19 @@ public class ItemEntityRemote extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!stack.hasTagCompound()) return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		if (!stack.hasTagCompound())
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		UUID entityID = UUID.fromString(stack.getTagCompound().getString("entityID"));
 		if (!world.isRemote) {
 			EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 			Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(entityID);
-			if(entity == null) return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
-			CommonProxy.INSTANCE.sendTo(new EntityIDMessage(entity.getEntityId(), 1, hand.ordinal()), (EntityPlayerMP) player);
-			if(entity instanceof EntityLivingBase && player instanceof EntityPlayer) player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite), (EntityPlayer) player, (EntityLivingBase) entity, opposite);
+			if (entity == null)
+				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+			CommonProxy.INSTANCE.sendTo(new EntityIDMessage(entity.getEntityId(), 1, hand.ordinal()),
+					(EntityPlayerMP) player);
+			if (entity instanceof EntityLivingBase && player instanceof EntityPlayer)
+				player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite),
+						(EntityPlayer) player, (EntityLivingBase) entity, opposite);
 			entity.processInitialInteract(player, opposite);
 		}
 
