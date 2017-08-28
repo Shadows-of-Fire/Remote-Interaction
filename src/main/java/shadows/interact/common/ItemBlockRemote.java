@@ -16,7 +16,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import shadows.interact.core.RemoteInteract;
@@ -28,12 +27,10 @@ public class ItemBlockRemote extends Item {
 		setUnlocalizedName(RemoteInteract.MODID + "." + name);
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
-		GameRegistry.register(this);
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
-			float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		return onItemRightClick(world, player, hand).getType();
 	}
 
@@ -46,8 +43,7 @@ public class ItemBlockRemote extends Item {
 		EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 		IBlockState state = world.getBlockState(pos);
 
-		state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), 0.5F, 0.5F,
-				0.5F);
+		state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), 0.5F, 0.5F, 0.5F);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
@@ -59,10 +55,7 @@ public class ItemBlockRemote extends Item {
 
 	private ItemStack mapStack(BlockPos pos, World world, ItemStack stack, EntityPlayer player) {
 		Block block = world.getBlockState(pos).getBlock();
-		stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock())
-				.getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos),
-						new RayTraceResult(new Vec3d(0.5, 0.5, 0.5), player.getHorizontalFacing(), pos), world, pos,
-						player)));
+		stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock()).getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos), new RayTraceResult(new Vec3d(0.5, 0.5, 0.5), player.getHorizontalFacing(), pos), world, pos, player)));
 
 		NBTTagLong tag = new NBTTagLong(pos.toLong());
 		stack.setTagInfo("pos", tag);

@@ -18,10 +18,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import shadows.interact.core.RemoteInteract;
+import shadows.interact.proxy.ClientProxy;
 import shadows.interact.proxy.CommonProxy;
 import shadows.interact.util.EntityIDMessage;
 
@@ -32,12 +32,10 @@ public class ItemEntityRemote extends Item {
 		setUnlocalizedName(RemoteInteract.MODID + "." + name);
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
-		GameRegistry.register(this);
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing,
-			float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		return onItemRightClick(world, player, hand).getType();
 	}
 
@@ -52,11 +50,9 @@ public class ItemEntityRemote extends Item {
 			Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(entityID);
 			if (entity == null)
 				return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
-			CommonProxy.INSTANCE.sendTo(new EntityIDMessage(entity.getEntityId(), 1, hand.ordinal()),
-					(EntityPlayerMP) player);
+			CommonProxy.INSTANCE.sendTo(new EntityIDMessage(entity.getEntityId(), 1, hand.ordinal()), (EntityPlayerMP) player);
 			if (entity instanceof EntityLivingBase && player instanceof EntityPlayer)
-				player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite),
-						(EntityPlayer) player, (EntityLivingBase) entity, opposite);
+				player.getHeldItem(opposite).getItem().itemInteractionForEntity(player.getHeldItem(opposite), (EntityPlayer) player, (EntityLivingBase) entity, opposite);
 			entity.processInitialInteract(player, opposite);
 		}
 
@@ -83,6 +79,6 @@ public class ItemEntityRemote extends Item {
 
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, shadows.interact.proxy.ClientProxy.INTERACTION_MRL);
+		ModelLoader.setCustomModelResourceLocation(this, 0, ClientProxy.INTERACTION_MRL);
 	}
 }

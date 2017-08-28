@@ -12,6 +12,5 @@ public class ClientProxy extends CommonProxy {
 		ModRegistry.initModels();
 	}
 
-	public static final ModelResourceLocation INTERACTION_MRL = new ModelResourceLocation(
-			ModRegistry.REMOTE.getRegistryName(), "inventory");
+	public static final ModelResourceLocation INTERACTION_MRL = new ModelResourceLocation(ModRegistry.REMOTE.getRegistryName(), "inventory");
 }
