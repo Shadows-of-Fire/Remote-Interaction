@@ -1,5 +1,6 @@
 package shadows.interact.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -8,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import shadows.interact.core.RecipeRegistry;
+import shadows.interact.core.ModRegistry;
 import shadows.interact.core.RemoteInteract;
 import shadows.interact.util.EntityIDMessage;
 import shadows.interact.util.EntityIDMessage.IDHandler;
@@ -20,7 +21,7 @@ public class CommonProxy {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		RecipeRegistry.init();
+		MinecraftForge.EVENT_BUS.register(new ModRegistry());
 	}
 
 	public void init(FMLInitializationEvent e) {

@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -19,6 +20,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import shadows.interact.core.RemoteInteract;
+import shadows.interact.proxy.ClientProxy;
 
 public class ItemBlockRemote extends Item {
 
@@ -31,6 +33,10 @@ public class ItemBlockRemote extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (player.isSneaking()) {
+			mapStack(pos, player.world, player.getHeldItemMainhand(), player, hitX, hitY, hitZ);
+			return EnumActionResult.SUCCESS;
+		}
 		return onItemRightClick(world, player, hand).getType();
 	}
 
@@ -39,31 +45,41 @@ public class ItemBlockRemote extends Item {
 		ItemStack stack = player.getHeldItem(hand);
 		if (!stack.hasTagCompound())
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
-		BlockPos pos = BlockPos.fromLong(stack.getTagCompound().getLong("pos"));
+		NBTTagCompound tag = stack.getTagCompound();
+		BlockPos pos = BlockPos.fromLong(tag.getLong("pos"));
 		EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
-		IBlockState state = world.getBlockState(pos);
+		if (world.isBlockLoaded(pos)) {
+			IBlockState state = world.getBlockState(pos);
 
-		state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), 0.5F, 0.5F, 0.5F);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			float x = tag.getFloat("x");
+			float y = tag.getFloat("y");
+			float z = tag.getFloat("z");
+
+			boolean flag;//Need the tile to think the player is near the tile, whilist keeping the player over here.  Might need a player wrapper that delegates to two different players for position and gui opening.
+
+			if (flag = !state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), x, y, z)) {
+				EnumActionResult res = player.getHeldItem(opposite).onItemUse(player, world, pos, opposite, player.getHorizontalFacing(), x, y, z);
+				return new ActionResult<ItemStack>(res, stack);
+			} else if (!flag)
+				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		}
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 
-	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-		mapStack(pos, player.world, player.getHeldItemMainhand(), player);
-		return true;
-	}
-
-	private ItemStack mapStack(BlockPos pos, World world, ItemStack stack, EntityPlayer player) {
+	private ItemStack mapStack(BlockPos pos, World world, ItemStack stack, EntityPlayer player, float hitX, float hitY, float hitZ) {
 		Block block = world.getBlockState(pos).getBlock();
-		stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock()).getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos), new RayTraceResult(new Vec3d(0.5, 0.5, 0.5), player.getHorizontalFacing(), pos), world, pos, player)));
+		stack.setStackDisplayName("Interact With " + Item.getItemFromBlock(world.getBlockState(pos).getBlock()).getItemStackDisplayName(block.getPickBlock(world.getBlockState(pos), new RayTraceResult(new Vec3d(hitX, hitY, hitZ), player.getHorizontalFacing(), pos), world, pos, player)));
 
 		NBTTagLong tag = new NBTTagLong(pos.toLong());
 		stack.setTagInfo("pos", tag);
+		stack.getTagCompound().setFloat("x", hitX);
+		stack.getTagCompound().setFloat("y", hitY);
+		stack.getTagCompound().setFloat("z", hitZ);
 		return stack;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void initModel() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, shadows.interact.proxy.ClientProxy.INTERACTION_MRL);
+		ModelLoader.setCustomModelResourceLocation(this, 0, ClientProxy.INTERACTION_MRL);
 	}
 }
