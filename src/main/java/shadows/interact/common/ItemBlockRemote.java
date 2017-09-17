@@ -43,8 +43,7 @@ public class ItemBlockRemote extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!stack.hasTagCompound())
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		if (!stack.hasTagCompound()) return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		NBTTagCompound tag = stack.getTagCompound();
 		BlockPos pos = BlockPos.fromLong(tag.getLong("pos"));
 		EnumHand opposite = hand == EnumHand.MAIN_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
@@ -60,8 +59,7 @@ public class ItemBlockRemote extends Item {
 			if (flag = !state.getBlock().onBlockActivated(world, pos, state, player, opposite, player.getHorizontalFacing(), x, y, z)) {
 				EnumActionResult res = player.getHeldItem(opposite).onItemUse(player, world, pos, opposite, player.getHorizontalFacing(), x, y, z);
 				return new ActionResult<ItemStack>(res, stack);
-			} else if (!flag)
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+			} else if (!flag) return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
